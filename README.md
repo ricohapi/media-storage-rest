@@ -34,12 +34,6 @@ curl --request GET 'https://mss.ricohapi.com/v1/media' \
 
 * [Media](media.md)
 
-## SDK & Sample Apps
-
-* [SDK for Ruby](https://github.com/ricohapi/media-storage-rb)
-* [SDK for JavaScript](https://github.com/ricohapi/media-storage-js)
-* [Sample App](https://github.com/ricohapi/media-storage-sample-app)
-
 ## API Console
 
 You can play with the Ricoh Media Storage REST API using its [API Console](http://docs.ricohapi.com/docs/media-storage-rest).
