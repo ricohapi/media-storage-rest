@@ -14,11 +14,11 @@ All API endpoints are listed below.
 | [GET /media/{id}/meta](#GetMediaMeta) | Fetch metadata (Exif, Photo Sphere XMP etc.) of a media data |
 | [GET /media/{id}/meta/exif](#GetMediaMetaExif) | Fetch Exif of a media data |
 | [GET /media/{id}/meta/gpano](#GetMediaMetaGpano) | Fetch Photo Sphere XMP of a media data |
-| [DELETE /media/{id}/media/user](#DeleteMediaMetaUser) | Delete all user metadata from a media data |
-| [GET  /media/{id}/media/user](#GetMediaMetaUser) | Fetch all user metadata on a media data |
-| [DELETE /media/{id}/media/user/{key}](#DeleteMediaMetaUserKey) | Delete a user metadata from a media data |
-| [GET  /media/{id}/media/user/{key}](#GetMediaMetaUserKey) | Fetch a user metadata on a media data |
-| [PUT  /media/{id}/media/user/{key}](#PutMediaMetaUserKey) | Add a user metadata on a media data |
+| [DELETE /media/{id}/meta/user](#DeleteMediaMetaUser) | Delete all user metadata from a media data |
+| [GET  /media/{id}/meta/user](#GetMediaMetaUser) | Fetch all user metadata on a media data |
+| [DELETE /media/{id}/meta/user/{key}](#DeleteMediaMetaUserKey) | Delete a user metadata from a media data |
+| [GET  /media/{id}/meta/user/{key}](#GetMediaMetaUserKey) | Fetch a user metadata on a media data |
+| [PUT  /media/{id}/meta/user/{key}](#PutMediaMetaUserKey) | Add a user metadata on a media data |
 
 * The default encoding is UTF-8, 4 bytes or fewer per each character.
 * The maximum request body size is 1MB, except for `POST /media` call.
