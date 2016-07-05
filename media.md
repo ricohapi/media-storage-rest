@@ -285,16 +285,12 @@ The maximum payload size is defined per each conten type.
 | 429 | Too Many Requests. |
 | 500 | Internal server error. |
 
-
 <a name="SearchMedia"></a>
 ## POST /media/search
 
-Searches the media data and returns the result as a list.<br>
-Up to 100 media data can be returned in one response.<br>
-If the size of the result list exceeds 100, retry with more query terms.
+Searches for media data with user metadata. This API will return a list sorted by created datetime. The list can contain 100 media data at maximum. If the returned list contains more than 100 media data, retry this API with more searching conditions.  
 
-The search supports schema version `"2016-06-01"`.<br>
-This API allows query terms on user metadata only.
+The supported schema version is `"2016-07-08"`. 
 
 ### URL Structure
 ```
@@ -305,7 +301,7 @@ https://mss.ricohapi.com/v1/media/search
 ```sh
 curl --request POST 'https://mss.ricohapi.com/v1/media/search' \
      --header 'Authorization: Bearer <access token>' \
-     --data '{"search_version": "2016-06-01","query": {"meta.user.key1":"value1"}}'
+     --data '{"search_version": "2016-07-08","query": {"meta.user.key1":"value1", "limit":10}}'
 ```
 
 ### Parameters
@@ -319,13 +315,18 @@ curl --request POST 'https://mss.ricohapi.com/v1/media/search' \
 #### Example
 ```JavaScript
 {
-  "search_version":"2016-06-01",
+  "search_version":"2016-07-08",
   "query":{
     "meta.user.key1":"value1",
     "meta.user.key2":"value2"
         .
         .
         .
+  },
+  "paging": {
+    "before": "71234bad-234a-4537-8e11-521c2e232345",
+    "after": "1234bad4-234a-4537-8e11-54c82e567342",
+    "limit": 20
   }
 }
 ```
@@ -334,12 +335,21 @@ curl --request POST 'https://mss.ricohapi.com/v1/media/search' \
 |----|:----:|-------------|
 | search_version | string | (required) Version of the search model schema: `"2016-06-01"` |
 | query | object(Query) | (required) Search condition in list of _query terms_ (key-value pairs).|
+| paging | object(Paging) | (optional) Information for paging |
 
 ##### Object(Query)
 
 | FieldName | Type | Description |
 |----|:----:|-------------|
 | meta.user.<key\>| string | Each query term represents an exact match against a single user metadata value. When multiple query terms are specified, they are combined as AND (there is no option for OR). Use `"meta.user"` in a key prefix to denote this is a user metadata query. |
+
+##### Object(Paging)
+
+| FieldName | Type | Description |
+|----|:----:|-------------|
+| after| string | (optional) Media ID<br> Response will include a list of media data `after` the specified id, including the media data which the id points to. If both `before` and `after` are specified, `after` has priority. | 
+| before| string | (optional) Media ID<br> Response will include a list of media data `before` the specified id, excluding the media data which the id points to. If both `before` and `after` are specified, `after` has priority. | 
+| limit| number | (optional) Number of media data returned<br> The default is 10, and maximum is 100. | 
 
 ### Response
 
@@ -353,7 +363,11 @@ curl --request POST 'https://mss.ricohapi.com/v1/media/search' \
           .
           .
           .
-  ]
+  ],          
+  "paging":{
+    "next":"https://mss.ricohapi.com/v1/media/?after=71234bad-234a-4537-8e11-54c82e567345\u0026limit=10",
+    "previous":"https://mss.ricohapi.com/v1/media?before=71234bad-234a-4537-8e11-521c2e232345\u0026limit=10"
+  }
 }
 ```
 
@@ -364,12 +378,20 @@ curl --request POST 'https://mss.ricohapi.com/v1/media/search' \
 | Field Name | Type | Description |
 |----|:----:|-------------|
 | media[] | object(Media) | List of media information |
+| paging | object(Paging) | information for paging |
 
 #### Object(Media)
 
 | Field Name | Type | Description |
 |----|:----:|-------------|
 | id | string | Media ID |
+
+#### Object(Paging)
+
+| Field Name | Type | Description |
+|----|:----:|-------------|
+| next | string | The URI of the next page. <br> If the next page does not exist, this key won't be included. |
+| previous | string | The URI of the previous page. <br> If the previous page does not exist, this key won't be included. |
 
 ### Status Codes
 | Code | Reason |
@@ -842,7 +864,7 @@ curl --request GET 'https://mss.ricohapi.com/v1/media/a39jcbc5-053c-4873-a7c0-0b
 <a name="DeleteMediaMetaUserKey"></a>
 ## DELETE /media/{id}/meta/user/{key}
 
-Deteles the user metadata under the specified key.
+Deletes the user metadata under the specified key.
 
 ### URL Structure
 ```
