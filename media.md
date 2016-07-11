@@ -301,7 +301,7 @@ https://mss.ricohapi.com/v1/media/search
 ```sh
 curl --request POST 'https://mss.ricohapi.com/v1/media/search' \
      --header 'Authorization: Bearer <access token>' \
-     --data '{"search_version": "2016-07-08","query": {"meta.user.key1":"value1", "limit":10}}'
+     --data '{"search_version":"2016-07-08","query":{"meta.user.key1":"value1"}, "paging":{"limit":10}}'
 ```
 
 ### Parameters
